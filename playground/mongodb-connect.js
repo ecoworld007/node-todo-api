@@ -1,4 +1,4 @@
-const MongoClient =  require('mongodb').MongoClient;
+const {MongoClient, ObjectID} =  require('mongodb');
 
 MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client) => {
     if(err){
@@ -24,7 +24,7 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client) => {
         if(err){
             return console.log('Unable to insert the user');
         }
-        console.log(JSON.stringify(res.ops, undefined, 2));
+        console.log(JSON.stringify(res.ops[0]._id.getTimestamp(), undefined, 2));
     });
 
     client.close();
