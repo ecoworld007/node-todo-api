@@ -4,37 +4,68 @@ mongoose.Promise = global.Promise;
 
 mongoose.connect('mongodb://localhost:27017/TodoApp');
 
-let Todo = mongoose.model('Todo',{
-    text: {
-        type: String
+// let Todo = mongoose.model('Todo',{
+//     text: {
+//         type: String,
+//         required: true,
+//         minlength: 1,
+//         trim: true //remove the trailing spaces from the terminals
+//     },
+//     completed: {
+//         type: Boolean,
+//         default: true
+//     },
+//     completedAt: {
+//         type: Number,
+//         default: null
+//     }
+// });
+
+// let newTodo = new Todo({
+//     text: 'Cook dinner',
+//     completed: false
+// });
+
+// newTodo.save().then((doc) => {
+//     console.log('Saved Todo '+ doc)
+// }, (err) => {
+//     console.log('Unable to save Todo '+err);
+// });
+
+// let otherTodo = new Todo({
+//     text: '   Boooyaa Feed cat     ',
+//     completed: false,
+//     completedAt: 123
+// });
+
+// otherTodo.save().then((doc) => {
+//     console.log('Saved Todo '+ doc)
+// }, (err) => {
+//     console.log('Unable to save Todo '+err);
+// });
+
+
+
+let User = mongoose.model('User',{
+    email: {
+        type: String,
+        required: true,
+        minlength: 1,
+        trim: true //remove the trailing spaces from the terminals
     },
-    completed: {
-        type: Boolean
-    },
-    completedAt: {
-        type: Number
+    password: {
+        type: String,
+        default: true
     }
 });
 
-let newTodo = new Todo({
-    text: 'Cook dinner',
-    completed: false
+let newUser = new User({
+    email: 'luffy@onepiece.com',
+    password: 'iwillbethekingofpirates'
 });
 
-newTodo.save().then((doc) => {
-    console.log('Saved Todo '+ doc)
+newUser.save().then( (doc) => {
+    console.log('User is saved '+ doc);
 }, (err) => {
-    console.log('Unable to save Todo '+err);
-});
-
-let otherTodo = new Todo({
-    text: 'Feed cat',
-    completed: false,
-    completedAt: 123
-});
-
-otherTodo.save().then((doc) => {
-    console.log('Saved Todo '+ doc)
-}, (err) => {
-    console.log('Unable to save Todo '+err);
-});
+    console.log('Unable to save User ' + err);
+})
