@@ -9,6 +9,7 @@
   "author": "Himanshu Negi",
   "license": "ISC",
   "dependencies": {
-    "mongodb": "^3.0.7"
+    "mongodb": "^3.0.7",
+    "mongoose": "^5.0.16"
   }
 }
