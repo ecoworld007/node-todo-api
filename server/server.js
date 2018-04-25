@@ -4,45 +4,45 @@ mongoose.Promise = global.Promise;
 
 mongoose.connect('mongodb://localhost:27017/TodoApp');
 
-// let Todo = mongoose.model('Todo',{
-//     text: {
-//         type: String,
-//         required: true,
-//         minlength: 1,
-//         trim: true //remove the trailing spaces from the terminals
-//     },
-//     completed: {
-//         type: Boolean,
-//         default: true
-//     },
-//     completedAt: {
-//         type: Number,
-//         default: null
-//     }
-// });
+let Todo = mongoose.model('Todo',{
+    text: {
+        type: String,
+        required: true,
+        minlength: 1,
+        trim: true //remove the trailing spaces from the terminals
+    },
+    completed: {
+        type: Boolean,
+        default: true
+    },
+    completedAt: {
+        type: Number,
+        default: null
+    }
+});
 
-// let newTodo = new Todo({
-//     text: 'Cook dinner',
-//     completed: false
-// });
+let newTodo = new Todo({
+    text: 'Cook dinner',
+    completed: false
+});
 
-// newTodo.save().then((doc) => {
-//     console.log('Saved Todo '+ doc)
-// }, (err) => {
-//     console.log('Unable to save Todo '+err);
-// });
+newTodo.save().then((doc) => {
+    console.log('Saved Todo '+ doc)
+}, (err) => {
+    console.log('Unable to save Todo '+err);
+});
 
-// let otherTodo = new Todo({
-//     text: '   Boooyaa Feed cat     ',
-//     completed: false,
-//     completedAt: 123
-// });
+let otherTodo = new Todo({
+    text: '   Boooyaa Feed cat     ',
+    completed: false,
+    completedAt: 123
+});
 
-// otherTodo.save().then((doc) => {
-//     console.log('Saved Todo '+ doc)
-// }, (err) => {
-//     console.log('Unable to save Todo '+err);
-// });
+otherTodo.save().then((doc) => {
+    console.log('Saved Todo '+ doc)
+}, (err) => {
+    console.log('Unable to save Todo '+err);
+});
 
 
 
