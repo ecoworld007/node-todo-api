@@ -104,7 +104,7 @@ describe('GET /todos/:id', () => {
 describe('DELETE /todos/:id', () => {
     it('should delete the todo for valid id', (done) => {
         let id = todos[0]._id.toHexString();
-        request(app).delete(`/todos/${todos[0]._id.toHexString()}`).expect(200).expect((res) => {
+        request(app).delete(`/todos/${id}`).expect(200).expect((res) => {
             expect(res.body.todo).toBeAn('object').toIncludeKey('text');
         }).end((err, res) => {
             if(err){
@@ -128,5 +128,40 @@ describe('DELETE /todos/:id', () => {
         request(app).delete(`/todos/2q}`).expect(404).expect((res) => {
             expect(res.body).toBeAn('object');
         }).end(done);
+    });
+});
+
+describe('PATCH /todos/:id', () => {
+
+    it('should update todo', (done) => {
+        let id = todos[0]._id.toHexString();
+        let text = 'testing patch todo';
+        request(app).patch(`/todos/${id}`).send({text, completed: true}).expect(200).expect((res) => {
+            expect(res.body.todo).toBeAn('object').toIncludeKey('text');
+        }).end((err, res) => {
+            if(err){
+                return done(err);
+            }
+            expect(res.body.todo.text).toBe(text);
+            expect(res.body.todo.completed).toBe(true);
+            expect(res.body.todo.completedAt).toBeA('number');
+            done();
+        });
+    });
+
+    it('should clear completedAt if todo is not completed', (done) => {
+        let id = todos[1]._id.toHexString();
+        let text = 'test second patch';
+        request(app).patch(`/todos/${id}`).send({text, completed: false}).expect(200).expect((res) => {
+            expect(res.body.todo).toBeAn('object').toIncludeKey('text');
+        }).end((err, res) => {
+            if(err){
+                return done(err);
+            }
+            expect(res.body.todo.text).toBe(text);
+            expect(res.body.todo.completed).toBe(false);
+            expect(res.body.todo.completedAt).toNotExist();
+            done();
+        });
     });
 });
