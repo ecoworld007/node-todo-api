@@ -41,6 +41,13 @@ app.post('/users',(req, res) => {
     })
 });
 
+app.get('/todos', (req, res) => {
+    Todo.find().then((todos) => {
+        res.send({todos});
+    }, (err) => {
+        res.status(400).send(err);
+    });
+});
 
 app.listen(PORT, () => {
     console.log('Server listening to the port '+PORT);
