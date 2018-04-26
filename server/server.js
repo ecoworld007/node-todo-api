@@ -1,43 +1,47 @@
-const mongoose = require('./db/mongoose');
+const express = require('express');
+const bodyParser =  require('body-parser');
 
-const Todo = require('./models/todo');
-const User = require('./models/user');
+const {mongoose} = require('./db/mongoose');
+const {Todo} = require('./models/todo');
+const {User} = require('./models/user');
 
+let PORT =  process.env.PORT || 3000;
 
-let newTodo = new Todo({
-    text: 'Cook dinner',
-    completed: false
+let app = express();
+
+app.use(bodyParser.json());
+
+app.post('/todos',(req, res) => {
+    let newTodo = new Todo({
+        text: req.body.text,
+        completed: req.body.completed,
+        completedAt: req.body.completedAt
+    });
+    newTodo.save().then((doc) => {
+        console.log('Saved Todo '+ doc);
+        res.send(doc);
+    }, (err) => {
+        console.log('Unable to save Todo '+err);
+        res.status(400).send(err);
+    });
 });
 
-newTodo.save().then((doc) => {
-    console.log('Saved Todo '+ doc)
-}, (err) => {
-    console.log('Unable to save Todo '+err);
-});
-
-let otherTodo = new Todo({
-    text: '   Boooyaa Feed cat     ',
-    completed: false,
-    completedAt: 123
-});
-
-otherTodo.save().then((doc) => {
-    console.log('Saved Todo '+ doc)
-}, (err) => {
-    console.log('Unable to save Todo '+err);
+app.post('/users',(req, res) => {
+    let newUser = new User({
+        email: req.body.email,
+        password: req.body.password
+    });
+    
+    newUser.save().then( (doc) => {
+        console.log('User is saved '+ doc);
+        res.send(doc);
+    }, (err) => {
+        console.log('Unable to save User ' + err);
+        res.status(400).send(err);
+    })
 });
 
 
-
-
-
-let newUser = new User({
-    email: 'luffy@onepiece.com',
-    password: 'iwillbethekingofpirates'
+app.listen(PORT, () => {
+    console.log('Server listening to the port '+PORT);
 });
-
-newUser.save().then( (doc) => {
-    console.log('User is saved '+ doc);
-}, (err) => {
-    console.log('Unable to save User ' + err);
-})
