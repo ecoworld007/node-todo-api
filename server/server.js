@@ -1,21 +1,8 @@
 const mongoose = require('./db/mongoose');
 
-let Todo = mongoose.model('Todo',{
-    text: {
-        type: String,
-        required: true,
-        minlength: 1,
-        trim: true //remove the trailing spaces from the terminals
-    },
-    completed: {
-        type: Boolean,
-        default: true
-    },
-    completedAt: {
-        type: Number,
-        default: null
-    }
-});
+const Todo = require('./models/todo');
+const User = require('./models/user');
+
 
 let newTodo = new Todo({
     text: 'Cook dinner',
@@ -42,18 +29,7 @@ otherTodo.save().then((doc) => {
 
 
 
-let User = mongoose.model('User',{
-    email: {
-        type: String,
-        required: true,
-        minlength: 1,
-        trim: true //remove the trailing spaces from the terminals
-    },
-    password: {
-        type: String,
-        default: true
-    }
-});
+
 
 let newUser = new User({
     email: 'luffy@onepiece.com',
