@@ -45,3 +45,7 @@ app.post('/users',(req, res) => {
 app.listen(PORT, () => {
     console.log('Server listening to the port '+PORT);
 });
+
+module.exports = {
+    app
+};
