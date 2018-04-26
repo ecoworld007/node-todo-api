@@ -1,8 +1,4 @@
-const mongoose = require('mongoose');
-
-mongoose.Promise = global.Promise;
-
-mongoose.connect('mongodb://localhost:27017/TodoApp');
+const mongoose = require('./db/mongoose');
 
 let Todo = mongoose.model('Todo',{
     text: {
