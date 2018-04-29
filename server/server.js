@@ -1,5 +1,3 @@
-
-
 require('./config/configs');
 
 const _ = require('lodash');
@@ -33,10 +31,7 @@ app.post('/todos',(req, res) => {
 });
 
 app.post('/users',(req, res) => {
-    let newUser = new User({
-        email: req.body.email,
-        password: req.body.password
-    });
+    let newUser = new User(_.pick(req.body, ['email', 'password']));
     
     newUser.save().then( (doc) => {
         console.log('User is saved '+ doc);
