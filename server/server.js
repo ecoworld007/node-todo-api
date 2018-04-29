@@ -32,11 +32,9 @@ app.post('/todos',(req, res) => {
 
 app.post('/users',(req, res) => {
     let newUser = new User(_.pick(req.body, ['email', 'password']));
-    
-    newUser.save().then( (doc) => {
-        console.log('User is saved '+ doc);
-        res.send(doc);
-    }, (err) => {
+    newUser.generateAuthToken().then(token => {
+        res.header('x-auth',token).send(newUser);
+    }).catch(err => {
         console.log('Unable to save User ' + err);
         res.status(400).send(err);
     })
