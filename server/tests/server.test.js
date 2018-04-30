@@ -4,24 +4,9 @@ const request =  require('supertest');
 
 const {app} =  require('../server');
 const {Todo} = require('../models/todo');
+const {todos, populateTodos} = require('./seed/seed');
 
-const todos =[
-    {
-        _id: new ObjectID(),
-        text: 'first test todo'
-    },
-    {
-        _id: new ObjectID(),
-        text: 'second test todo'
-    }
-];
-
-beforeEach((done)=>{
-    Todo.remove({}).then(() => {
-        console.log('Successfuly removed.');
-        Todo.insertMany(todos);
-    }).then(()=>done());
-})
+beforeEach(populateTodos);
 
 describe('POST /todos', () => {
     it('should add todo',(done) => {
