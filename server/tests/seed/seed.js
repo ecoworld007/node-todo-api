@@ -9,7 +9,7 @@ let userSecondId = new ObjectID();
 
 const users = [
     {
-        _id: userOneId.toHexString(),
+        _id: userOneId,
         email: 'userone@email.com',
         password: 'testuseronepassword',
         tokens:[
@@ -20,7 +20,7 @@ const users = [
         ]
     },
     {
-        _id: userSecondId.toHexString(),
+        _id: userSecondId,
         email: 'usersecond@email.com',
         password: 'testusersecondpassword'
     }

@@ -1,6 +1,7 @@
 const {ObjectID} = require('mongodb');
 const expect = require('expect');
 const request =  require('supertest');
+const jwt = require('jsonwebtoken');
 
 const {app} =  require('../server');
 const {Todo} = require('../models/todo');
@@ -150,5 +151,47 @@ describe('PATCH /todos/:id', () => {
             expect(res.body.todo.completedAt).toNotExist();
             done();
         });
+    });
+});
+
+describe('GET /users/me', () => {
+    it('should return user if authenticated', (done) => {
+        request(app).get('/users/me').set('x-auth', users[0].tokens[0].token).expect(200).expect(res => {
+            expect(res.body._id).toBe(users[0]._id.toHexString());
+            expect(res.body.email).toBeA('string').toBe(users[0].email);
+        }).end(done);
+    });
+
+    it('should return 401 if not authenticated', (done) => {
+        request(app).get('/users/me').expect(401).expect(res => {
+            expect(res.body).toEqual({});
+        }).end(done);
+    });
+});
+
+describe('POST /users', () => {
+    it('should create user', (done) => {
+        let newUser = {
+            email: 'test@email.com',
+            password: 'secret'
+        }
+        request(app).post('/users').send(newUser).expect(200).expect(res => {
+            User.findById(res.body._id).then(user => {
+                expect(user.email).toBe(newUser.email);
+                expect(user.password).toNotEqual(newUser.password);
+            });
+        }).end(done);
+    });
+
+    it('should return validation error if request is invalid', (done) => {
+        let newUser = {
+            email: 'test@emailcom',
+            password: 'secret'
+        }
+        request(app).post('/users').send(newUser).expect(400).end(done);
+    });
+
+    it('should not create user if email already used', (done) => {
+        request(app).post('/users').send(users[0]).expect(400).end(done);
     });
 });
