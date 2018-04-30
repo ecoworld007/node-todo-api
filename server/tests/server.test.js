@@ -179,7 +179,7 @@ describe('POST /users', () => {
             User.findById(res.body._id).then(user => {
                 expect(user.email).toBe(newUser.email);
                 expect(user.password).toNotEqual(newUser.password);
-            });
+            }).catch(err => done(err));
         }).end(done);
     });
 
@@ -193,5 +193,42 @@ describe('POST /users', () => {
 
     it('should not create user if email already used', (done) => {
         request(app).post('/users').send(users[0]).expect(400).end(done);
+    });
+});
+
+describe('POST /users/login', () => {
+    it('should login user and return token', (done) => {
+        request(app).post('/users/login').send(users[0]).expect(200).expect(res => {
+            expect(res.headers['x-auth']).toExist();
+            expect(res.body.email).toBe(users[0].email);
+            expect(res.body._id).toExist().toBe(users[0]._id.toHexString());
+        }).end((err, res) => {
+            if(err){
+                return done(err);
+            }
+            User.findById(res.body._id).then(user => {
+                expect(user).toExist();
+                expect(user.tokens[1]).toInclude({
+                    'access': 'auth',
+                    'token': res.headers['x-auth']
+                });
+                done();
+            }).catch(err => done(err));
+        });
+    });
+
+    it('should not login invalid user', (done) => {
+        request(app).post('/users/login').send({email: users[1].email, password: users[1].password+'1'}).expect(400).expect(res => {
+            expect(res.headers['x-auth']).toNotExist();
+        }).end((err, res) => {
+            if(err){
+                return done(err);
+            }
+            User.findOne({email: users[1].email}).then(user => {
+                expect(user).toExist();
+                expect(user.tokens.length).toBe(0);
+                done();
+            }).catch(err => done());
+        });
     });
 });
