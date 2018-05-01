@@ -22,26 +22,34 @@ const users = [
     {
         _id: userSecondId,
         email: 'usersecond@email.com',
-        password: 'testusersecondpassword'
+        password: 'testusersecondpassword',
+        tokens:[
+            {
+                access: 'auth',
+                token: jwt.sign({_id: userSecondId.toHexString(), access: 'auth'},'123abc')
+            }
+        ]
     }
 ]
 
 const todos =[
     {
         _id: new ObjectID(),
-        text: 'first test todo'
+        text: 'first test todo',
+        _creator: userOneId
     },
     {
         _id: new ObjectID(),
-        text: 'second test todo'
+        text: 'second test todo',
+        _creator: userSecondId
     }
 ];
 
 const populateTodos = (done)=>{
     Todo.remove({}).then(() => {
         console.log('Successfuly removed.');
-        Todo.insertMany(todos);
-    }).then(()=>done());
+        return Todo.insertMany(todos).then(()=>done());
+    }).catch(err => done());
 };
 
 const populateUsers = (done) => {
