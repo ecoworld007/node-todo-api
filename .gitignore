@@ -62,3 +62,6 @@ typings/
 
 # visual studio code setting
 .vscode
+
+# config json for storing process env
+server/config/config.json
