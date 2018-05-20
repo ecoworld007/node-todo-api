@@ -64,4 +64,4 @@ typings/
 .vscode
 
 # config json for storing process env
-server/config/config.json
+#server/config/config.json
